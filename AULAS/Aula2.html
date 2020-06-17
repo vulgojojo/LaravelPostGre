@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<!-- saved from url=(0095)http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Usando Banco de Dados na Nuvem do Heroku</title>
+<!-- 2020-06-01 seg 12:40 -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="Org-mode">
+<meta name="author" content="wagner">
+
+<link href="./Aula2_files/bootstrap.min.css" rel="stylesheet">
+<script src="./Aula2_files/jquery.min.js.download"></script>
+<script src="./Aula2_files/bootstrap.min.js.download"></script>
+<style type="text/css">
+/* org mode styles on top of twbs */
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    font-size: 18px;
+    margin-bottom: 105px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 101px;
+    background-color: #f5f5f5;
+}
+
+footer > div {
+    padding: 10px;
+}
+
+footer p {
+    margin: 0 0 5px;
+    text-align: center;
+    font-size: 16px;
+}
+
+#table-of-contents {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+blockquote p {
+    font-size: 18px;
+}
+
+pre {
+    font-size: 16px;
+}
+
+.footpara {
+    display: inline-block;
+}
+
+figcaption {
+  font-size: 16px;
+  color: #666;
+  font-style: italic;
+  padding-bottom: 15px;
+}
+
+/* from twbs docs */
+
+.bs-docs-sidebar.affix {
+    position: static;
+}
+@media (min-width: 768px) {
+    .bs-docs-sidebar {
+        padding-left: 20px;
+    }
+}
+
+/* All levels of nav */
+.bs-docs-sidebar .nav > li > a {
+    display: block;
+    padding: 4px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #999;
+}
+.bs-docs-sidebar .nav > li > a:hover,
+.bs-docs-sidebar .nav > li > a:focus {
+    padding-left: 19px;
+    color: #A1283B;
+    text-decoration: none;
+    background-color: transparent;
+    border-left: 1px solid #A1283B;
+}
+.bs-docs-sidebar .nav > .active > a,
+.bs-docs-sidebar .nav > .active:hover > a,
+.bs-docs-sidebar .nav > .active:focus > a {
+    padding-left: 18px;
+    font-weight: bold;
+    color: #A1283B;
+    background-color: transparent;
+    border-left: 2px solid #A1283B;
+}
+
+/* Nav: second level (shown on .active) */
+.bs-docs-sidebar .nav .nav {
+    display: none; /* Hide by default, but at >768px, show it */
+    padding-bottom: 10px;
+}
+.bs-docs-sidebar .nav .nav > li > a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 30px;
+    font-size: 12px;
+    font-weight: normal;
+}
+.bs-docs-sidebar .nav .nav > li > a:hover,
+.bs-docs-sidebar .nav .nav > li > a:focus {
+    padding-left: 29px;
+}
+.bs-docs-sidebar .nav .nav > .active > a,
+.bs-docs-sidebar .nav .nav > .active:hover > a,
+.bs-docs-sidebar .nav .nav > .active:focus > a {
+    padding-left: 28px;
+    font-weight: 500;
+}
+
+/* Nav: third level (shown on .active) */
+.bs-docs-sidebar .nav .nav .nav {
+    padding-bottom: 10px;
+}
+.bs-docs-sidebar .nav .nav .nav > li > a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 40px;
+    font-size: 12px;
+    font-weight: normal;
+}
+.bs-docs-sidebar .nav .nav .nav > li > a:hover,
+.bs-docs-sidebar .nav .nav .nav > li > a:focus {
+    padding-left: 39px;
+}
+.bs-docs-sidebar .nav .nav .nav > .active > a,
+.bs-docs-sidebar .nav .nav .nav > .active:hover > a,
+.bs-docs-sidebar .nav .nav .nav > .active:focus > a {
+    padding-left: 38px;
+    font-weight: 500;
+}
+
+/* Show and affix the side nav when space allows it */
+@media (min-width: 992px) {
+    .bs-docs-sidebar .nav > .active > ul {
+        display: block;
+    }
+    /* Widen the fixed sidebar */
+    .bs-docs-sidebar.affix,
+    .bs-docs-sidebar.affix-bottom {
+        width: 213px;
+    }
+    .bs-docs-sidebar.affix {
+        position: fixed; /* Undo the static from mobile first approach */
+        top: 20px;
+    }
+    .bs-docs-sidebar.affix-bottom {
+        position: absolute; /* Undo the static from mobile first approach */
+    }
+    .bs-docs-sidebar.affix .bs-docs-sidenav,.bs-docs-sidebar.affix-bottom .bs-docs-sidenav {
+        margin-top: 0;
+        margin-bottom: 0
+    }
+}
+@media (min-width: 1200px) {
+    /* Widen the fixed sidebar again */
+    .bs-docs-sidebar.affix-bottom,
+    .bs-docs-sidebar.affix {
+        width: 263px;
+    }
+}
+</style>
+<script type="text/javascript">
+$(function() {
+    'use strict';
+
+    $('.bs-docs-sidebar li').first().addClass('active');
+
+    $(document.body).scrollspy({target: '.bs-docs-sidebar'});
+
+    $('.bs-docs-sidebar').affix();
+});
+</script>
+
+<script type="text/x-mathjax-config;executed=true">
+MathJax.Hub.Config({
+  displayAlign: "center",
+  displayIndent: "2em",
+  messageStyle: "none",
+  "HTML-CSS": {
+    scale: 100,
+    styles: {
+      ".MathJax_Display": {
+        "font-size": "100%"
+      }
+    }
+  },
+  "SVG": {
+    scale: 100,
+    styles: {
+      ".MathJax_SVG_Display": {
+        "font-size": "100%",
+        "margin-left": "-2.281em"
+      }
+    }
+  }
+});
+</script>
+<script src="./Aula2_files/MathJax.js.download" id=""></script>
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body><div id="MathJax_Message" style="display: none;"></div>
+<div id="content" class="container">
+<div class="row"><div class="col-md-9"><h1 class="title">Usando Banco de Dados na Nuvem do Heroku</h1>
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Tema</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Usando Banco de dados do Heroku
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Justificativa e Objetivos</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Que o mercado utiliza nuvem e indiscutivel e so por isso ja faz
+sentido a gente utililizar nuvem nas aulas do curso tecnico. 
+</p>
+
+<p>
+A nuvem do heroku e bastante popular no mercado e prove um banco de
+dados opensource bastante popular tambem.
+</p>
+
+<p>
+Alem disso a instalacao de muitos servidores de varias disciplinas e
+varios assuntos na maquina local do aluno nao e uma boa pratica e em
+geral resulta em um ambiente super lento e desmotivador.
+</p>
+
+<p>
+Por esses motivos e outros e muito importante encontrar-mos
+alternativas em solucoes de nuvem e, para efeitos dessa disciplina,
+estamos interessados em utilizar o banco de dados da nuvem do heroku.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Duracao</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+1 Aula
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Pre-Requisitos</h2>
+<div class="outline-text-2" id="text-4">
+</div><div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> Conhecimentos Previos</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+Basicao sobre o que he o heroku (O prof pode te explicar)
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> Recursos</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+Cliente do heroku instalado na sua maquina<sup><a id="fnr.1" name="fnr.1" class="footref" href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#fn.1">1</a></sup>
+</p>
+
+<p>
+Se precisar fazer a instalacao<sup><a id="fnr.2" name="fnr.2" class="footref" href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#fn.2">2</a></sup>, consulte os links na referencia
+desse material ou peca ajuda do professor.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Procedimento didatico</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Exposicao dialogada e contextualizacao e apoio aos alunos durante a
+execucao dos procedimentos descritos neste material
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Exercicioos e Atividades de Reflex�o/Fixa��o</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Execucao desse material e posterior utilizacao em outros apps
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Avalia��o</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+Por enquanto nenhuma
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Introducao</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+Parece um pouco novo esse assunto, essa aula, mas se vc ler com
+carinho, com calma e sem ansiedade vc vai fazer de boa… eu tb vou
+fazer o meu melhor aqui pra que tudo faca sentido pra vc… Mas vc
+sabe que e so perguntar no forum<sup><a id="fnr.3" name="fnr.3" class="footref" href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#fn.3">3</a></sup> do nosso curso ou pro professor
+mesmo. Vc so fica sozinho se vc nao se cumunicar…
+</p>
+
+<p>
+Neste aula vamos usar o banco de dados postgresql provido
+gratuitamente pelo heroku.
+</p>
+
+<p>
+Vc precisa de um APP la no heroku e neste app a gente diz pro
+heroku que usaremos um banco de dados.
+</p>
+
+<p>
+Como a gente cria um app no heroku? Faca o seguinte…
+</p>
+
+
+
+<div class="org-src-container">
+
+<pre class="src src-shell" id="heroku apps:create backupsys">heroku apps:create backupsys
+</pre>
+</div>
+
+<p>
+Pra saber se vc criou seu app direitinho vc pode consultar os seus
+apps que vc tem no heroku como o comando abaixo…
+</p>
+
+
+<div class="org-src-container">
+
+<pre class="src src-shell" id="heroku apps">heroku apps
+</pre>
+</div>
+
+<pre class="example">[2m=== [22m[1m[36mwagnerdocri@gmail.com[39m Apps[22m
+afternoon-earth-39122
+backupsys
+checkexames
+desolate-brushlands-63827
+hello3-laravel
+heroku-postgres-2fbcc39b
+heroku-postgres-a744e88e
+murmuring-fortress-41004
+planosdeaulas
+projetoeteczl
+pw3-laravel
+salty-reef-03497
+tranquil-depths-78728
+
+[2m=== [22m[1mCollaborated Apps[22m
+engsoftware2018  bjorgejorge85@gmail.com
+</pre>
+
+<p>
+Pela saida abaixo da pra ver que eu tenho varios apps la no heroku
+inclusive esse backupsys que criamos agora… Pra vc, se for a
+primeira fez que vc ta fazendo, vai aparecer so esse app mesmo…
+</p>
+
+<p>
+Pra apagar algum app que vc nao vai usar mais, he so usar o comando
+heroku app:destroy nomedoapp
+</p>
+
+
+<div class="org-src-container">
+
+<pre class="src src-shell" id="heroku app:destroy desolate-brushlands-63827">heroku apps:destroy desolate-brushlands-63827 --confirm desolate-brushlands-63827
+</pre>
+</div>
+
+
+<p>
+Bom, agora que vc tem um app na nuvem do heroku, e agora vamos
+adicionar o acesso ao banco de dados.
+</p>
+
+<p>
+Pra isso, basta executar o seguinte comando.
+</p>
+
+
+<div class="org-src-container">
+
+<pre class="src src-shell" id="heroku addons:create heroku-postgresql:hobby-dev">heroku addons:create --app backupsys heroku-postgresql:hobby-dev
+</pre>
+</div>
+
+
+<p>
+Adicionamos acesso ao banco de dados, mas isso ta meio misterioso
+ainda, onde que a gente pode ver alguma eviencia disso?
+</p>
+
+<p>
+Boa pergunta…
+</p>
+
+<p>
+De esse comando que vc vai perceber que o nosso app tem acesso a um
+banco
+</p>
+
+
+<div class="org-src-container">
+
+<pre class="src src-shell" id="heroku config --app backupsys">heroku config --app backupsys
+</pre>
+</div>
+
+<pre class="example">[2m=== [22m[1mbackupsys Config Vars[22m
+[34m[32mDATABASE_URL[34m[39m: postgres://oxqhncielwegia:8fb6586ca8cc5e3159c15c5ed2a0c32305c4939c22484e1084ed940d9cd55baf@ec2-52-44-55-63.compute-1.amazonaws.com:5432/ddkm16esktl7p5
+</pre>
+
+
+
+<p>
+Podemos obter mais informacoes sobre nosso banco…
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-shell" id="heroku pg:info --app backupsys">heroku pg:info --app backupsys
+</pre>
+</div>
+
+<pre class="example">[2m=== [22m[1m[32mDATABASE_URL[39m[22m
+Plan:                  Hobby-dev
+Status:                Available
+Connections:           0/20
+PG Version:            12.2
+Created:               2020-05-17 16:19 UTC
+Data Size:             7.9 MB
+Tables:                0
+Rows:                  0/10000 (In compliance)
+Fork/Follow:           Unsupported
+Rollback:              Unsupported
+Continuous Protection: Off
+Add-on:                [33mpostgresql-fluffy-96271[39m
+</pre>
+
+
+<p>
+Ja ta tudo ok pra usar o banco na nossa aplicacao, nos vamos ver como
+fazer daqui a pouco. Mas uma curiosidade: vc percebeu que o banco de
+dados e na verdade um addon do heroku. Tipo algo como um plugin de
+acesso a banco de dados… Vc pode ter outros addons no seu projeto,
+obviamente tem varios bastantes interessantes e disponiveis. Pra vc
+ver quais addons estao adicionados no seu projeto, de o seguinte
+comando…
+</p>
+
+
+<div class="org-src-container">
+
+<pre class="src src-shell" id="heroku addons --app backupsys">[wagner@Unknown BD3] $ heroku addons --app backupsys
+
+Add-on                                       Plan       Price  State  
+
+<span style="color: #87cefa;">heroku-postgresql</span> (postgresql-fluffy-96271)  hobby-dev  free   created
+ as DATABASE
+
+The table above shows add-ons and the attachments to the current app (backupsys) or other apps.
+
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> Acessando nosso banco</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+Pra acessar o postgresql a gente vai precisar instalar o cliente do
+postgresql em nossa maquina. No site do heroku, mostra como a gente
+faz essa instalacao<sup><a id="fnr.4" name="fnr.4" class="footref" href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#fn.4">4</a></sup> 
+</p>
+
+<p>
+no meu linux fedora eu dou um dnf install postgresql, em outros linux
+baseados em debian vc pode usar um sudo apt-get install postgresql ou
+consulte o como fazer se sua distribuicao usar outro gerenciador de
+pacotes.
+</p>
+
+<p>
+Como a maioria do pessoal usa windows, tem uma url<sup><a id="fnr.3.100" name="fnr.3.100" class="footref" href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#fn.3">3</a></sup> especifica pra
+isso. E so fazer o download e dar next next.
+</p>
+
+<p>
+o que vc precisa e do comando psql, e com ele que a gente vai
+interagir com nosso banco de dados.
+</p>
+
+<p>
+Veja como esta na minha maquina
+</p>
+
+
+<div class="org-src-container">
+
+<pre class="src src-shell" id="psql --version">psql --version
+</pre>
+</div>
+
+<pre class="example">psql (PostgreSQL) 11.7
+</pre>
+
+
+
+<p>
+Bom agora a gente quer conectar no nosso banco no heroku, pra isso a
+gente vai indicar nosso banco ao psql atraves de uma variabel de
+ambiente. Se vc tiver no windows vc pode user o comando set no linux o
+comando export. Veja esses comandos abaixo.
+</p>
+
+
+<div class="org-src-container">
+
+<pre class="src src-shell" id="export DATABASE_URL=postgres://oxqhncielwegia:8fb6586ca8cc5e3159c15c5ed2a0c32305c4939c22484e1084ed940d9cd55baf@ec2-52-44-55-63.compute-1.amazonaws.com:5432/ddkm16esktl7p5"><span style="color: #b0c4de;">export</span> <span style="color: #eedd82;">DATABASE_URL</span>=postgres://oxqhncielwegia:8fb6586ca8cc5e3159c15c5ed2a0c32305c4939c22484e1084ed940d9cd55baf@ec2-52-44-55-63.compute-1.amazonaws.com:5432/ddkm16esktl7p5
+</pre>
+</div>
+
+
+<p>
+No seu windows troque comando export por set
+</p>
+
+<p>
+Lembrando que a variavel de ambiente vai valer para o seu terminal que
+vc esta usando, nao vale pra outros.
+</p>
+
+<p>
+Bom agora e so conectar mesmo…
+</p>
+
+
+
+<div class="org-src-container">
+
+<pre class="src src-shell" id="heroku pg:psql">  [wagner@Unknown ~] $ heroku pg:psql --app backupsys
+--&gt; Connecting to postgresql-fluffy-96271
+<span style="color: #87cefa;">psql</span> (11.7, servidor 12.2 (Ubuntu 12.2-2.pgdg16.04+1))
+AVISO: psql versão 11, servidor versão 12.
+         Algumas funcionalidades do psql podem não funcionar.
+conexão SSL (protocolo: TLSv1.2, cifra: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compressão: desabilitado)
+Digite <span style="color: #ffa07a;">"help"</span> para ajuda.
+
+backupsys::<span style="color: #eedd82;">DATABASE</span>=&gt; 
+
+
+[wagner@Unknown BD3] $ heroku pg:psql --app backupsys
+--&gt; Connecting to postgresql-fluffy-96271
+<span style="color: #87cefa;">psql</span> (11.7, servidor 12.2 (Ubuntu 12.2-2.pgdg16.04+1))
+AVISO: psql versão 11, servidor versão 12.
+         Algumas funcionalidades do psql podem não funcionar.
+conexão SSL (protocolo: TLSv1.2, cifra: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compressão: desabilitado)
+Digite <span style="color: #ffa07a;">"help"</span> para ajuda.
+
+backupsys::<span style="color: #eedd82;">DATABASE</span>=&gt; \c ddkm16esktl7p5
+<span style="color: #87cefa;">psql</span> (11.7, servidor 12.2 (Ubuntu 12.2-2.pgdg16.04+1))
+AVISO: psql versão 11, servidor versão 12.
+         Algumas funcionalidades do psql podem não funcionar.
+conexão SSL (protocolo: TLSv1.2, cifra: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compressão: desabilitado)
+Você está conectado agora ao banco de dados <span style="color: #ffa07a;">"ddkm16esktl7p5"</span> como usuário <span style="color: #ffa07a;">"oxqhncielwegia"</span>.
+backupsys::<span style="color: #eedd82;">DATABASE</span>=&gt; 
+
+</pre>
+</div>
+
+<p>
+A url do datbase tem esse formato:
+</p>
+
+<p>
+postgresql://[user[:password]@][netloc][:port][/dbname][?param1=value1&amp;…]
+</p>
+
+<p>
+Entao, os dados do nosso banco de dados sao os seguintes….
+</p>
+
+<p>
+<b>Servidor do nosso banco</b>:ec2-52-44-55-63.compute-1.amazonaws.com:5432
+<b>Nome do nosso banco</b>: ddkm16esktl7p5
+<b>Usuario</b>:oxqhncielwegia
+<b>Senha</b>:8fb6586ca8cc5e3159c15c5ed2a0c32305c4939c22484e1084ed940d9cd55baf
+</p>
+
+
+<p>
+Ja estamos conectados, agora podemos usar nosso banco…
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> Usando o banco de dados com psql</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+Conectado no banco vc pode dar um "\d" sem as aspas pra ver se vc tem
+alguma tabela criada… a gente sabe que nao tem ne… he so pra confirmar…
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-shell" id="backupsys::DATABASE=&gt; \d backupsys::DATABASE=&gt;">backupsys::<span style="color: #eedd82;">DATABASE</span>=&gt; \d
+Did not find any relations.
+backupsys::<span style="color: #eedd82;">DATABASE</span>=&gt; 
+</pre>
+</div>
+
+
+
+<p>
+Bom vamos criar nossa primeira tabela entao ne… o basicao de sql que
+a gente sa sabe, vamos la…
+</p>
+
+<p>
+Vou criar entao uma tabela com nome tbl_teste1 com o seguinte codigo
+sql
+</p>
+
+
+<div class="org-src-container">
+
+<pre class="src src-sql" id="sql code create table tbl_teste1(id integer primary key, col1 varchar(10));"><span style="color: #00ffff;">create</span> <span style="color: #00ffff;">table</span> <span style="color: #87cefa;">tbl_teste1</span>(id <span style="color: #98fb98;">integer</span> <span style="color: #00ffff;">primary</span> <span style="color: #00ffff;">key</span>, col1 <span style="color: #98fb98;">varchar</span>(10));
+</pre>
+</div>
+
+
+<p>
+So que vou digitar isso na linha de comando do psql conectado…
+</p>
+
+
+<div class="org-src-container">
+
+<pre class="src src-sql" id="create table tbl_teste1(id integer primary key, col1 varchar(10));">  backupsys::DATABASE=&gt; <span style="color: #00ffff;">create</span> <span style="color: #00ffff;">table</span> tbl_teste1(id <span style="color: #98fb98;">integer</span> <span style="color: #00ffff;">primary</span> <span style="color: #00ffff;">key</span>, col1 <span style="color: #98fb98;">varchar</span>(10));
+<span style="color: #00ffff;">CREATE</span> <span style="color: #00ffff;">TABLE</span>
+backupsys::DATABASE=&gt; \d
+               Lista de relações
+ Esquema |    Nome    |  Tipo  |      Dono      
+<span style="color: #ff7f24;">---------+------------+--------+----------------</span>
+ <span style="color: #00ffff;">public</span>  | tbl_teste1 | tabela | oxqhncielwegia
+(1 registro)
+
+backupsys::DATABASE=&gt; 
+
+</pre>
+</div>
+
+
+<p>
+Veja que deu um "\d" de novo pra listas as tabelas do banco e a nossa
+ta aparecendo la… de agora em diante e so ir dando os comandos sql
+na linha de comando normalmente pra inserir e pra dar select…
+</p>
+
+<p>
+So que vcs sabem que a gente costuma usar em bando de dados digitar
+nossos scripts sql em um arquivo sql que em geral a gente acaba
+commitando e tudo… entao como a gente utilizaria um arquivo de
+script nessa situacao aqui? vamos ver…
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> usando nossos scripts sql</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+Bom, eu escrevi um script sql basicao tambem, que cria uma tabela…
+</p>
+
+
+<div class="org-src-container">
+
+<pre class="src src-sql"><span style="color: #00ffff;">create</span> <span style="color: #00ffff;">table</span> <span style="color: #87cefa;">test2</span>(
+id <span style="color: #98fb98;">integer</span> <span style="color: #00ffff;">primary</span> <span style="color: #00ffff;">key</span>,
+col1 <span style="color: #98fb98;">varchar</span>(20)
+)
+</pre>
+</div>
+
+<p>
+Vou usar o "\i caminhoProMeuScript.sql" pra rodar meu script…
+</p>
+
+
+<div class="org-src-container">
+
+<pre class="src src-shell" id="backupsys::DATABASE=&gt; \i /home/wagner/envs/env-dev/sources/somewritings/planosdeaulas/BD3/sql_pgscripts/scriptdeteste.sql">  backupsys::<span style="color: #eedd82;">DATABASE</span>=&gt; \i /home/wagner/envs/env-dev/sources/somewritings/planosdeaulas/BD3/sql_pgscripts/scriptdeteste.sql 
+CREATE TABLE
+backupsys::<span style="color: #eedd82;">DATABASE</span>=&gt; \d
+               Lista de relações
+ Esquema |    Nome    |  Tipo  |      Dono      
+---------+------------+--------+----------------
+ public  | tbl_teste1 | tabela | oxqhncielwegia
+ public  | test2      | tabela | oxqhncielwegia
+(2 registros)
+
+backupsys::<span style="color: #eedd82;">DATABASE</span>=&gt; 
+
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> Desconectando</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+pra desconectar use um "\q"
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13"><span class="section-number-2">13</span> veja tambem</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+pra conhecer outros comandos use "\h"
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14"><span class="section-number-2">14</span> conectando usando o netbeans</h2>
+<div class="outline-text-2" id="text-14">
+<p>
+<img src="./Aula2_files/nb_heroku_pg_conn1.png" class="img-responsive" alt="nb_heroku_pg_conn1.png">
+<img src="./Aula2_files/nb_heroku_pg_conn2.png" class="img-responsive" alt="nb_heroku_pg_conn2.png">
+<img src="./Aula2_files/nb_heroku_pg_conn3.png" class="img-responsive" alt="nb_heroku_pg_conn3.png">
+<img src="./Aula2_files/nb_heroku_pg_conn4.png" class="img-responsive" alt="nb_heroku_pg_conn4.png">
+<img src="./Aula2_files/nb_heroku_pg_conn5.png" class="img-responsive" alt="nb_heroku_pg_conn5.png">
+<img src="./Aula2_files/nb_heroku_pg_conn6.png" class="img-responsive" alt="nb_heroku_pg_conn6.png">
+<img src="./Aula2_files/nb_heroku_pg_conn7.png" class="img-responsive" alt="nb_heroku_pg_conn7.png">
+<img src="./Aula2_files/nb_heroku_pg_conn8.png" class="img-responsive" alt="nb_heroku_pg_conn8.png">
+<img src="./Aula2_files/nb_heroku_pg_conn9.png" class="img-responsive" alt="nb_heroku_pg_conn9.png">
+<img src="./Aula2_files/nb_heroku_pg_conn10.png" class="img-responsive" alt="nb_heroku_pg_conn10.png">
+<img src="./Aula2_files/nb_heroku_pg_conn11.png" class="img-responsive" alt="nb_heroku_pg_conn11.png">
+<img src="./Aula2_files/nb_heroku_pg_conn12.png" class="img-responsive" alt="nb_heroku_pg_conn12.png">
+<img src="./Aula2_files/nb_heroku_pg_conn13.png" class="img-responsive" alt="nb_heroku_pg_conn13.png">
+<img src="./Aula2_files/nb_heroku_pg_conn14.png" class="img-responsive" alt="nb_heroku_pg_conn14.png">
+<img src="./Aula2_files/nb_heroku_pg_conn15.png" class="img-responsive" alt="nb_heroku_pg_conn15.png">
+<img src="./Aula2_files/nb_heroku_pg_conn16.png" class="img-responsive" alt="nb_heroku_pg_conn16.png">
+<img src="./Aula2_files/nb_heroku_pg_conn16.png" class="img-responsive" alt="nb_heroku_pg_conn16.png">
+<img src="./Aula2_files/nb_heroku_pg_conn17.png" class="img-responsive" alt="nb_heroku_pg_conn17.png">
+<img src="./Aula2_files/nb_heroku_pg_conn18.png" class="img-responsive" alt="nb_heroku_pg_conn18.png">
+<img src="./Aula2_files/nb_heroku_pg_conn19.png" class="img-responsive" alt="nb_heroku_pg_conn19.png">
+<img src="./Aula2_files/nb_heroku_pg_conn20.png" class="img-responsive" alt="nb_heroku_pg_conn20.png">
+<img src="./Aula2_files/nb_heroku_pg_conn21.png" class="img-responsive" alt="nb_heroku_pg_conn21.png">
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-15" class="outline-2">
+<h2 id="sec-15"><span class="section-number-2">15</span> conectando usando o vscode</h2>
+<div class="outline-text-2" id="text-15">
+<p>
+Instalacao do plugin
+</p>
+
+<p>
+<img src="./Aula2_files/vscode_heroku_pg_conn1.png" class="img-responsive" alt="vscode_heroku_pg_conn1.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn2.png" class="img-responsive" alt="vscode_heroku_pg_conn2.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn3.png" class="img-responsive" alt="vscode_heroku_pg_conn3.png">
+</p>
+
+<p>
+Usando o plugin pra conectar
+</p>
+
+<p>
+<img src="./Aula2_files/vscode_heroku_pg_conn14.png" class="img-responsive" alt="vscode_heroku_pg_conn14.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn15.png" class="img-responsive" alt="vscode_heroku_pg_conn15.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn16.png" class="img-responsive" alt="vscode_heroku_pg_conn16.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn17.png" class="img-responsive" alt="vscode_heroku_pg_conn17.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn18.png" class="img-responsive" alt="vscode_heroku_pg_conn18.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn19.png" class="img-responsive" alt="vscode_heroku_pg_conn19.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn20.png" class="img-responsive" alt="vscode_heroku_pg_conn20.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn21.png" class="img-responsive" alt="vscode_heroku_pg_conn21.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn22.png" class="img-responsive" alt="vscode_heroku_pg_conn22.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn23.png" class="img-responsive" alt="vscode_heroku_pg_conn23.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn24.png" class="img-responsive" alt="vscode_heroku_pg_conn24.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn25.png" class="img-responsive" alt="vscode_heroku_pg_conn25.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn26.png" class="img-responsive" alt="vscode_heroku_pg_conn26.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn27.png" class="img-responsive" alt="vscode_heroku_pg_conn27.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn28.png" class="img-responsive" alt="vscode_heroku_pg_conn28.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn29.png" class="img-responsive" alt="vscode_heroku_pg_conn29.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn30.png" class="img-responsive" alt="vscode_heroku_pg_conn30.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn31.png" class="img-responsive" alt="vscode_heroku_pg_conn31.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn32.png" class="img-responsive" alt="vscode_heroku_pg_conn32.png">
+<img src="./Aula2_files/vscode_heroku_pg_conn33.png" class="img-responsive" alt="vscode_heroku_pg_conn33.png">
+</p>
+
+
+
+
+<p>
+Como eu nao uso o vscode eu nao tenho um material mais especifico
+sobre como usar o vscode depois de conectar, mas ja e um comeco pro
+pessoal que usa.
+</p>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-16" class="outline-2">
+<h2 id="sec-16"><span class="section-number-2">16</span> Referencias</h2>
+<div class="outline-text-2" id="text-16">
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#fnr.1">1</a></sup> <p class="footpara">
+<a href="https://devcenter.heroku.com/articles/heroku-cli">https://devcenter.heroku.com/articles/heroku-cli</a>
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#fnr.2">2</a></sup> <p class="footpara">
+<a href="https://devcenter.heroku.com/articles/heroku-cli#download-and-install">https://devcenter.heroku.com/articles/heroku-cli#download-and-install</a>
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#fnr.3">3</a></sup> <p class="footpara">
+<a href="http://ds-eteczl.209235.n8.nabble.com/">http://ds-eteczl.209235.n8.nabble.com/</a>
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#fnr.4">4</a></sup> <p class="footpara">
+<a href="https://devcenter.heroku.com/articles/heroku-postgresql">https://devcenter.heroku.com/articles/heroku-postgresql</a>
+</p></div>
+
+
+</div>
+</div></div><div class="col-md-3"><nav id="table-of-contents">
+<div id="text-table-of-contents" class="bs-docs-sidebar affix">
+<ul class="nav">
+<li class=""><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-1">1. Tema</a></li>
+<li class=""><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-2">2. Justificativa e Objetivos</a></li>
+<li class=""><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-3">3. Duracao</a></li>
+<li class=""><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-4">4. Pre-Requisitos</a>
+<ul class="nav">
+<li class=""><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-4-1">4.1. Conhecimentos Previos</a></li>
+<li class=""><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-4-2">4.2. Recursos</a></li>
+</ul>
+</li>
+<li class=""><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-5">5. Procedimento didatico</a></li>
+<li class=""><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-6">6. Exercicioos e Atividades de Reflex�o/Fixa��o</a></li>
+<li class=""><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-7">7. Avalia��o</a></li>
+<li class="active"><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-8">8. Introducao</a></li>
+<li><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-9">9. Acessando nosso banco</a></li>
+<li><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-10">10. Usando o banco de dados com psql</a></li>
+<li><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-11">11. usando nossos scripts sql</a></li>
+<li><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-12">12. Desconectando</a></li>
+<li><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-13">13. veja tambem</a></li>
+<li><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-14">14. conectando usando o netbeans</a></li>
+<li><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-15">15. conectando usando o vscode</a></li>
+<li><a href="http://www.planosdeaulas.com.br.s3-website-us-east-1.amazonaws.com/BD3/UsandoBancoDoHeroku.html#sec-16">16. Referencias</a></li>
+</ul>
+</div>
+</nav>
+</div></div></div>
+<footer id="postamble" class="">
+<div><p class="author">Author: wagner</p>
+<p class="date">Created: 2020-06-01 seg 12:40</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 26.3 (<a href="http://orgmode.org/">Org-mode</a> 9.3.6)</p>
+</div>
+</footer>
+
+
+</body></html>
