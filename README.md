@@ -8,7 +8,8 @@
 </p>
 
 ## Sobre
-Projeto de PW3 para aprender MVC com o framework Laravel usando a nuvem (Heroku) e o BD PostGree
+Projeto de PW3 para aprender MVC com o framework Laravel usando a nuvem (Heroku) e o BD PostGree.
+- Páginas HTML e documentos pdf com os tutoriais das aulas.
 
 ## Código de conduta
 
