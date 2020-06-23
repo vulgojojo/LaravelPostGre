@@ -1,1 +1,11 @@
 //
+$theme-colors: (
+  "primary": #0074d9,
+  "danger": #ff4136,
+  "success":green
+                
+);
+
+//entenda esse  ~ como o webpack voltando pro node_modules
+//so que se vc por ~/bootstratp ja nao vai funcionar...
+@import "~bootstrap/scss/bootstrap"
